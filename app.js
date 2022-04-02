@@ -19,6 +19,11 @@ const app = express();
 require('./config')(app);
 require("./config/session.config")(app)
 
+//this middleware allows us to have a global user object --> "userInSession"
+//which we can use now anywhere in our application(in any {{ HBS }} file)
+const globalUserObject = require("./config/global-user.config");
+app.use(globalUserObject);
+
 // default value for title local
 const projectName = 'lab-movies-celebrities';
 const capitalized = string => string[0].toUpperCase() + string.slice(1).toLowerCase();

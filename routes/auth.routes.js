@@ -4,7 +4,7 @@ const router = express.Router();
 const bcrypt = require("bcrypt");
 const { default: mongoose } = require("mongoose");
 
-
+const { isLoggedIn, isLoggedOut } = require("../config/route-guard.config")
 
 // GET route to display the signup form to a user
 router.get("/auth/signup", (req, res, next) => {
@@ -73,9 +73,11 @@ router.post("/auth/signup", (req, res, next) => {
 //******************************
 // GET ROUTE TO DISPLAY THE LOGIN FORM
 
-router.get("/auth/login", (req, res) => {
+router.get("/auth/login", isLoggedOut, (req, res) => {
     res.render("auth/login")
 })
+
+
 //******************************
 // POST ROUTE TO LOGIN
  router.post("/process-login", (req, res, next) => {
@@ -87,6 +89,8 @@ router.get("/auth/login", (req, res) => {
         })
         return;
     }
+
+    // use email address user inputted to check if the user exist in our DB
     User.findOne({ email })
     .then(userFromDB => {
         //userFromDB is a user object
@@ -116,9 +120,26 @@ router.get("/auth/login", (req, res) => {
  })
 })
 
+// POST ROUTE TO LOGOUT USER
 
-router.get("/auth/profile", (req, res, next) => {
-    res.render("auth/profile", { userInSession: req.session.currentUser })
+
+router.post("/logout", (req, res, next) => {
+    req.session.destroy(err => {
+        console.log(`Err while logout`)
+        if (err) next(err);
+        res.redirect("/")
+    })
+})
+
+
+
+
+
+// GET ROUTE TO DISPLAY USER'S PROFILE 
+
+
+router.get("/auth/profile", isLoggedIn, (req, res, next) => {
+    res.render("auth/profile")
 })
 
 // router.get("/auth/login", (req, res, next) => {

@@ -1,12 +1,20 @@
 <h1>{{title}}</h1>
 <p>Welcome to {{title}}</p>
 
-<div> 
-  <ul>
+<nav> 
+  {{#if userInSession}}
+  <a href="/auth/profile">PROFILE</a><br>
+  <form action="/logout" method="post">
+  <button>Logout</button>
+  </form>
+
+  {{else}}
   <a href="/auth/login">LOG IN</a>
   <a href="/auth/signup">SIGN UP</a>
-  </ul>
-</div>
+
+  {{/if}}
+  
+</nav>
 
 <div>
   <ul>
