@@ -52,7 +52,7 @@ router.post("/auth/signup", (req, res, next) => {
     })
     .then((userFromDB) => {
         //console.log(`New user created: ${userFromDB}`);
-        res.redirect("/auth/profile")
+        res.redirect("/auth/login")
     })
     .catch(err => {
         console.log(err);
